@@ -80,4 +80,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata")
     // Optional - Integration with RxJava
     implementation("androidx.compose.runtime:runtime-rxjava2")
+    val nav_version = "2.7.7" // Check for the latest stable version
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 }
