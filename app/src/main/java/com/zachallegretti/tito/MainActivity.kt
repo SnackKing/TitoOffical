@@ -104,18 +104,6 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun SoundboardScreen(navController: NavController) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(20.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("This is the Soundboard!")
-            Button(onClick = { navController.popBackStack() }) { Text("Back to Main Menu") } // Use popBackStack to go back
-        }
-    }
-
-    @Composable
     fun EatLikeTitoScreen(navController: NavController) {
         Column(modifier = Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Eat Like Tito Screen!")
