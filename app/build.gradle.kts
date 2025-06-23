@@ -21,6 +21,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.12"
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -78,6 +81,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
     // Optional - Integration with LiveData
     implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
+
     // Optional - Integration with RxJava
     implementation("androidx.compose.runtime:runtime-rxjava2")
     val nav_version = "2.7.7" // Check for the latest stable version
