@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742189556601",
+    "project_id": "titobackend",
+    "storage_bucket": "titobackend.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742189556601:android:0597d2b4a1cff20a8645a8",
+        "android_client_info": {
+          "package_name": "com.zachallegretti.tito"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_qeLsBJCMISUb_kapPMeEtBN5YBilkFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
