@@ -7,4 +7,5 @@ object Routes {
     const val EAT_LIKE_TITO = "eat_like_tito"
     const val GALLERY = "gallery"
     const val POINTS = "points"
+    const val AUTH = "auth"
 }
