@@ -8,4 +8,11 @@ object Routes {
     const val GALLERY = "gallery"
     const val POINTS = "points"
     const val AUTH = "auth"
+    const val CREATE_BET = "create_bet/{username}" // New route for creating a bet, now expects username
+    const val BET_LOBBY = "bet_lobby"
+
+    fun betLobbyRoute(lobbyId: String) = "bet_lobby/$lobbyId"
+    fun createBetRoute(username: String) = "create_bet/$username"
+
+
 }

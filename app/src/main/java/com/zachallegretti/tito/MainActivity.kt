@@ -38,9 +38,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -98,6 +101,36 @@ class MainActivity : ComponentActivity() {
                             // Pass auth and db to AuthScreen
                             AuthScreen(navController = navController, auth = auth, db = db)
                         }
+                        composable(
+                            route = Routes.CREATE_BET, // Route now includes username
+                            arguments = listOf(navArgument("username") { type = NavType.StringType }),
+                            // Explicitly define deep link for this route
+                            deepLinks = listOf(navDeepLink { uriPattern = "android-app://androidx.navigation/create_bet/{username}" })
+                        ) { backStackEntry ->
+                            val username = backStackEntry.arguments?.getString("username")
+                            if (username != null) {
+                                CreateBetScreen(navController = navController, auth = auth, db = db, hostUsername = username)
+                            } else {
+                                Toast.makeText(LocalContext.current, "Error: Host username missing.", Toast.LENGTH_SHORT).show()
+                                navController.popBackStack()
+                            }
+                        }
+                        composable(
+                            route = Routes.BET_LOBBY,
+                            arguments = listOf(navArgument("lobbyId") { type = NavType.StringType }),
+                            // Explicitly define deep link for this route
+                            deepLinks = listOf(navDeepLink { uriPattern = "android-app://androidx.navigation/bet_lobby/{lobbyId}" })
+                        ) { backStackEntry ->
+                            val lobbyId = backStackEntry.arguments?.getString("lobbyId")
+                            if (lobbyId != null) {
+                                BetLobbyScreen(navController = navController, auth = auth, db = db, lobbyId = lobbyId)
+                            } else {
+                                // Handle error: lobbyId is missing
+                                Toast.makeText(LocalContext.current, "Error: Lobby ID missing.", Toast.LENGTH_SHORT).show()
+                                navController.popBackStack() // Go back if no lobby ID
+                            }
+                        }
+
                     }
                 }
             }
@@ -287,6 +320,8 @@ class MainActivity : ComponentActivity() {
     fun PointsScreen(navController: NavController, auth: FirebaseAuth, db: FirebaseFirestore) {
         val currentUser by remember(auth) { mutableStateOf(auth.currentUser) }
         var userDataContent by remember { mutableStateOf("Username") }
+        var usernameDisplay by remember { mutableStateOf("Guest") } // This is for the display username
+
         val context = LocalContext.current
 
         // Effect to check auth state and navigate if not logged in
@@ -302,6 +337,10 @@ class MainActivity : ComponentActivity() {
                 fetchUserData(db, currentUser!!.uid) { data ->
                     userDataContent = data
                 }
+                // Fetch user profile to get the username
+                fetchUserProfile(db, currentUser!!.uid) { profile ->
+                    usernameDisplay = profile["username"] as? String ?: "Guest"
+                }
             }
         }
 
@@ -312,6 +351,9 @@ class MainActivity : ComponentActivity() {
                     // User is now logged in or still logged in, fetch data
                     fetchUserData(db, firebaseAuth.currentUser!!.uid) { data ->
                         userDataContent = data
+                    }
+                    fetchUserProfile(db, firebaseAuth.currentUser!!.uid) { profile ->
+                        usernameDisplay = profile["username"] as? String ?: "Guest"
                     }
                 } else {
                     // User logged out, clear data and navigate back to Auth or MainMenu if needed
@@ -398,7 +440,7 @@ class MainActivity : ComponentActivity() {
 
                 // New buttons for betting game
                 Button(
-                    onClick = { Toast.makeText(context, "Create Bet clicked!", Toast.LENGTH_SHORT).show() },
+                    onClick = { navController.navigate(Routes.createBetRoute(usernameDisplay)) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
